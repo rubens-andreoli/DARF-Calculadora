@@ -1,22 +1,24 @@
-package com.rubensandreoli.darfcalc;
+package rubensandreoli.darfcalc;
 
 public class AboutDialog extends javax.swing.JDialog {
 
     private final String programName;
     private final String programDesc;
     private final String version;
+    private final String year;
     
-    public AboutDialog(java.awt.Frame parent, final String programName, final String programDesc, final String version) {
+    public AboutDialog(java.awt.Frame parent, final String programName, final String programDesc, final String version, final String year) {
 	super(parent);
 	initComponents();
 	this.programName = programName;
 	this.programDesc = programDesc;
 	this.version = version;
+	this.year = year;
 	configComponents();
     }
     
-    public AboutDialog(java.awt.Frame parent, final String programName, final String version) {
-	this(parent, programName, null, version);
+    public AboutDialog(java.awt.Frame parent, final String programName, final String version, final String year) {
+	this(parent, programName, null, version, year);
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +37,7 @@ public class AboutDialog extends javax.swing.JDialog {
         setResizable(false);
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/rubensandreoli/darfcalc/images/logo.png"))); // NOI18N
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rubensandreoli/darfcalc/images/logo.png"))); // NOI18N
 
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
@@ -62,9 +64,7 @@ public class AboutDialog extends javax.swing.JDialog {
                         .addGap(119, 119, 119)
                         .addComponent(lblProgram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(spnlLicense)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(btnClose)))
+                    .addComponent(btnClose, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -95,7 +95,7 @@ public class AboutDialog extends javax.swing.JDialog {
 	    "<html><body style=\"text-align:justify, font-size:10px;\"><b>"+programName+"</b><br/>"
 	    + (programDesc != null ? programDesc+"<br/>":"")
 	    + "Versão: "+version+"<br/><br/><br/>"
-	    + "<p style=\"font-size:8px;\">Copyright (C) 2017  Rubens A. Andreoli Júnior</p></body></html>"
+	    + "<p style=\"font-size:8px;\">Copyright (C) "+year+"  Rubens A. Andreoli Júnior</p></body></html>"
 	    );   
 
 	txpLicense.setText(
@@ -118,7 +118,6 @@ public class AboutDialog extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblProgram;
     private javax.swing.JScrollPane spnlLicense;

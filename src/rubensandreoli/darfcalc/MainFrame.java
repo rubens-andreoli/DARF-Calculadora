@@ -1,4 +1,4 @@
-package com.rubensandreoli.darfcalc;
+package rubensandreoli.darfcalc;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -153,7 +153,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         lblBase.setText("Base:");
 
-        lblAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/rubensandreoli/darfcalc/images/about.png"))); // NOI18N
+        lblAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rubensandreoli/darfcalc/images/about.png"))); // NOI18N
         lblAbout.setToolTipText("sobre");
         lblAbout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblAbout.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -269,11 +269,11 @@ public class MainFrame extends javax.swing.JFrame {
 	JTextField tempTxf = txfPercent;
 	
 	try{
-	    total *= (Double.parseDouble(txfPercent.getText()))/100;
+	    total *= (Double.parseDouble(txfPercent.getText().replace(',', '.')))/100;
 	    txfPercent.setBackground(Color.white);
 
 	    tempTxf = txfDeduction;
-	    total -= Double.parseDouble(txfDeduction.getText());
+	    total -= Double.parseDouble(txfDeduction.getText().replace(',', '.'));
 	    txfDeduction.setBackground(Color.white);
 
 	    txfResult.setText(NumberFormat.getCurrencyInstance().format(total));
@@ -284,13 +284,12 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCalcActionPerformed
 
     private void lblAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutMouseClicked
-	new AboutDialog(this, "DARF Calculadora", "1.0.0").setVisible(true);
+	new AboutDialog(this, "DARF Calculadora", "1.0.1", "2017").setVisible(true);
     }//GEN-LAST:event_lblAboutMouseClicked
-
-    
+  
    private void addTxf(JPanel panel, List<JTextField> fieldList) {
 	JTextField txf = this.createTxf();
-	if(fieldList.isEmpty()) txf.setToolTipText("utilize ponto para os centavos");
+//	if(fieldList.isEmpty()) txf.setToolTipText("utilize ponto para os centavos");
 	fieldList.add(txf);
 	panel.add(txf);
 	panel.validate();
@@ -340,7 +339,7 @@ public class MainFrame extends javax.swing.JFrame {
 	for(JTextField txfIn : incomeFields) {
 	    if(!txfIn.getText().isEmpty()){
 		try{
-		    total += Double.parseDouble(txfIn.getText());
+		    total += Double.parseDouble(txfIn.getText().replace(',', '.'));
 		    txfIn.setBackground(Color.white);
 		}catch (NumberFormatException ex){
 		    isOk = false;
@@ -352,7 +351,7 @@ public class MainFrame extends javax.swing.JFrame {
 	for(JTextField txfOut : spentFields) {
 	    if(!txfOut.getText().isEmpty()){
 		try{
-		    total -= Double.parseDouble(txfOut.getText());
+		    total -= Double.parseDouble(txfOut.getText().replace(',', '.'));
 		    txfOut.setBackground(Color.white);
 		}catch (NumberFormatException ex){
 		    isOk = false;

@@ -309,7 +309,7 @@
     <Component class="javax.swing.JLabel" name="lblAbout">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/com/rubensandreoli/darfcalc/images/about.png"/>
+          <Image iconType="3" name="/rubensandreoli/darfcalc/images/about.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="sobre"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
