@@ -17,6 +17,11 @@ import javax.swing.JTextField;
 
 public class MainFrame extends javax.swing.JFrame {
 
+    private static final String TITLE = "DARF Calculadora";
+    private static final String VERSION = "1.1.1";
+    private static final String YEAR = "2017";
+    private static final String MSG_ERROR = "ERRO";
+    
     private final List<JTextField> incomeFields = new LinkedList<>();
     private final List<JTextField> spentFields = new LinkedList<>();
     
@@ -49,7 +54,7 @@ public class MainFrame extends javax.swing.JFrame {
         lblAbout = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("DARF Calculadora");
+        setTitle(TITLE);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("images/icon.png")));
         setResizable(false);
 
@@ -279,12 +284,12 @@ public class MainFrame extends javax.swing.JFrame {
 	    txfResult.setText(NumberFormat.getCurrencyInstance().format(total));
 	} catch (NumberFormatException ex) {
 	    tempTxf.setBackground(Color.red);
-	    txfResult.setText("ERRO");
+	    txfResult.setText(MSG_ERROR);
 	}
     }//GEN-LAST:event_btnCalcActionPerformed
 
     private void lblAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAboutMouseClicked
-	new AboutDialog(this, "DARF Calculadora", "1.0.1", "2017").setVisible(true);
+	new AboutDialog(this, TITLE, VERSION, YEAR).setVisible(true);
     }//GEN-LAST:event_lblAboutMouseClicked
   
    private void addTxf(JPanel panel, List<JTextField> fieldList) {
@@ -361,7 +366,7 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 	txfResult.setText(NumberFormat.getCurrencyInstance().format(0));
 	if(isOk) txfBase.setText(NumberFormat.getCurrencyInstance().format(total));
-	else txfBase.setText("ERRO");
+	else txfBase.setText(MSG_ERROR);
     }
 
     private void config() {
