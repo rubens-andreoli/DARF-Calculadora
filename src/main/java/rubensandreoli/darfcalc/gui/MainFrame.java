@@ -1,4 +1,4 @@
-package rubensandreoli.darfcalc;
+package rubensandreoli.darfcalc.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,12 +11,21 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import rubensandreoli.commons.swing.AboutDialog;
+import rubensandreoli.commons.utils.FileUtils;
 
 //icon.png: https://icons8.com/web-app/33035/Lion
 //about.png: http://www.flaticon.com/authors/gregor-cresnar
 
+//TODO https://impostoderenda2020.com.br/tabela-imposto-de-renda-2020/
+
 public class MainFrame extends javax.swing.JFrame {
 
+    private static final String PROGRAM_NAME = "Image Downloader";
+    private static final String PROGRAM_ICON = "images/icon.png";
+    private static final String PROGRAM_VERSION = "1.1.0";
+    private static final String PROGRAM_YEAR = "2020";
+    
     private static final String TITLE = "DARF Calculadora";
     private static final String VERSION = "1.1.1";
     private static final String YEAR = "2017";
@@ -55,7 +64,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(TITLE);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("images/icon.png")));
+        setIconImage(FileUtils.loadIcon(PROGRAM_ICON).getImage());
         setResizable(false);
 
         btnPlusIncome.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -158,7 +167,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         lblBase.setText("Base:");
 
-        lblAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rubensandreoli/darfcalc/images/about.png"))); // NOI18N
+        lblAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/about.png"))); // NOI18N
         lblAbout.setToolTipText("sobre");
         lblAbout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblAbout.addMouseListener(new java.awt.event.MouseAdapter() {

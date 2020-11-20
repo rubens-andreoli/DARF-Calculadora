@@ -1,6 +1,8 @@
 package rubensandreoli.darfcalc;
 
-public class Main {
+import rubensandreoli.darfcalc.gui.MainFrame;
+
+public class Launcher {
 
     public static void main(String args[]) {
 
