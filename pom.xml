@@ -16,6 +16,12 @@
             <artifactId>commons</artifactId>
             <version>0.1.0a</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
     </dependencies>
     <name>DARF Calculadora</name>
     <build>
@@ -34,7 +40,7 @@
               <archive>
                 <manifest>
                   <addClasspath>true</addClasspath>
-                  <mainClass>rubensandreoli.darfcalc.Launcher</mainClass>
+                  <mainClass>rubensandreoli.darfcalculator.Launcher</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
