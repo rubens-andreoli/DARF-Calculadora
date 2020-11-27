@@ -14,7 +14,7 @@
         <dependency>
             <groupId>rubens-andreoli</groupId>
             <artifactId>commons</artifactId>
-            <version>0.1.0a</version>
+            <version>0.2.0a</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>

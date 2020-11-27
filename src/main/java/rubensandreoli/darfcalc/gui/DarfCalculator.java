@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rubensandreoli.darfcalc;
+package rubensandreoli.darfcalc.gui;
 
+import rubensandreoli.darfcalc.rates.Rates;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -29,9 +30,11 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import rubensandreoli.commons.others.Level;
 import rubensandreoli.commons.swing.AboutDialog;
 import rubensandreoli.commons.utils.FileUtils;
-import rubensandreoli.darfcalc.Rates.Entry;
+import rubensandreoli.commons.utils.SwingUtils;
+import rubensandreoli.darfcalc.rates.Entry;
 
 public class DarfCalculator extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
@@ -42,14 +45,17 @@ public class DarfCalculator extends javax.swing.JFrame {
     private static final String PROGRAM_VERSION = "1.0.0";
     private static final String PROGRAM_YEAR = "2020";
     
-    private static final String ERROR_MSG = "ERRO";
+    private static final String VALUE_ERROR_MSG = "ERRO";
+    private static final String LOAD_ERROR_TITLE = "Falha na conexão!";
+    private static final String LOAD_ERROR_MSG = "Não foi possível carregar as taxas e deduções atuais.\n"
+            + "Visite o site da receita federal para encontrar os valores.";
     // </editor-fold>
     
     private final Font txfFont = new java.awt.Font("Tahoma", 0, 12);
     private final Dimension txfDimension = new Dimension(75, 20);
     private final List<JTextField> incomeFields = new LinkedList<>();
     private final List<JTextField> expensesFields = new LinkedList<>();
-    private Rates taxes;
+    private Rates rates;
     
     public DarfCalculator() {
 	initComponents();
@@ -97,7 +103,7 @@ public class DarfCalculator extends javax.swing.JFrame {
 
         btnPlusIncome.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnPlusIncome.setText("+");
-        btnPlusIncome.setToolTipText("Adiciona um campo de reiceta");
+        btnPlusIncome.setToolTipText("Adiciona um campo de receita");
         btnPlusIncome.setActionCommand("plusIncome");
         btnPlusIncome.setFocusable(false);
         btnPlusIncome.addActionListener(new java.awt.event.ActionListener() {
@@ -154,7 +160,7 @@ public class DarfCalculator extends javax.swing.JFrame {
 
         btnPlusExpenses.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnPlusExpenses.setText("+");
-        btnPlusExpenses.setToolTipText("Adiciona um campo de receitas");
+        btnPlusExpenses.setToolTipText("Adiciona um campo de despesa");
         btnPlusExpenses.setActionCommand("plusSpent");
         btnPlusExpenses.setFocusable(false);
         btnPlusExpenses.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +171,7 @@ public class DarfCalculator extends javax.swing.JFrame {
 
         btnMinusExpenses.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnMinusExpenses.setText("-");
-        btnMinusExpenses.setToolTipText("Remove um campo de despesas");
+        btnMinusExpenses.setToolTipText("Remove um campo de despesa");
         btnMinusExpenses.setActionCommand("minusDeduction");
         btnMinusExpenses.setFocusable(false);
         btnMinusExpenses.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +226,7 @@ public class DarfCalculator extends javax.swing.JFrame {
         txfBase.setEnabled(false);
 
         txfPercent.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txfPercent.setToolTipText("Verifique a tabela IRPF");
+        txfPercent.setToolTipText("Verifique esse valor na tabela IRPF mensal");
 
         lblPercent.setLabelFor(txfPercent);
         lblPercent.setText("Alíquota:");
@@ -229,7 +235,7 @@ public class DarfCalculator extends javax.swing.JFrame {
         lblDeduction.setText("Dedução:");
 
         txfDeduction.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txfDeduction.setToolTipText("Verifique a tabela IRPF");
+        txfDeduction.setToolTipText("Verifique esse valor na tabela IRPF mensal");
 
         lblResult.setLabelFor(txfResult);
         lblResult.setText("Resultado:");
@@ -362,7 +368,7 @@ public class DarfCalculator extends javax.swing.JFrame {
 	    txfResult.setText(NumberFormat.getCurrencyInstance().format(total));
 	} catch (NumberFormatException ex) {
 	    currentTxf.setBackground(Color.red);
-	    txfResult.setText(ERROR_MSG);
+	    txfResult.setText(VALUE_ERROR_MSG);
 	}
     }//GEN-LAST:event_btnCalcActionPerformed
 
@@ -407,19 +413,7 @@ public class DarfCalculator extends javax.swing.JFrame {
 	    panel.getParent().validate();
 	}
    }
-   
-   private boolean removeTxf(JPanel panel, List<JTextField> fieldList){
-       if(fieldList.size() == 1) return false;
-       fieldList.remove(fieldList.size()-1);
-       panel.remove(panel.getComponent(panel.getComponentCount()-1));
-       panel.repaint();
-       if(fieldList.size() >= 5){
-            panel.setPreferredSize(new Dimension(panel.getWidth(), panel.getHeight()-25));
-            panel.getParent().validate();
-       }
-       return true;
-   }
-    
+          
     private JTextField createTxf() {
 	final JTextField txf = new JTextField();
 	txf.setFont(txfFont);
@@ -434,8 +428,20 @@ public class DarfCalculator extends javax.swing.JFrame {
 	txf.setPreferredSize(txfDimension);
 	return txf;
     }
+   
+   private boolean removeTxf(JPanel panel, List<JTextField> fieldList){
+       if(fieldList.size() == 1) return false; //keep one
+       fieldList.remove(fieldList.size()-1);
+       panel.remove(panel.getComponent(panel.getComponentCount()-1));
+       panel.repaint();
+       if(fieldList.size() >= 5){
+            panel.setPreferredSize(new Dimension(panel.getWidth(), panel.getHeight()-25));
+            panel.getParent().validate();
+       }
+       return true;
+   }
 
-    private double addFields(List<JTextField> fields) {
+    private double calculateFields(List<JTextField> fields) {
         double total = 0;
         for(JTextField txf : fields) {
 	    if(!txf.getText().isEmpty()){
@@ -456,13 +462,13 @@ public class DarfCalculator extends javax.swing.JFrame {
 	boolean noError = true;
 	
         try{
-            total += addFields(incomeFields);
+            total += calculateFields(incomeFields);
         }catch(NumberFormatException ex){
             noError = false;
         }
         
         try{
-            total -= addFields(expensesFields);
+            total -= calculateFields(expensesFields);
         }catch(NumberFormatException ex){
             noError = false;
         }
@@ -470,17 +476,16 @@ public class DarfCalculator extends javax.swing.JFrame {
 	txfResult.setText(NumberFormat.getCurrencyInstance().format(0));
 	if(noError){
             txfBase.setText(NumberFormat.getCurrencyInstance().format(total));
-            getTax(total);
+            setRates(total);
         }else {
-            txfBase.setText(ERROR_MSG);
+            txfBase.setText(VALUE_ERROR_MSG);
             txfPercent.setText("0");
             txfDeduction.setText("0");
         }
     }
     
-    private void getTax(double val){
-        Entry e = taxes.getEntryFor(val);
-        System.out.println(e);
+    private void setRates(double val){
+        final Entry e = rates.getEntryFor(val);
         txfPercent.setText(String.valueOf(e.tax));
         txfDeduction.setText(String.valueOf(e.deduction));
     }
@@ -492,18 +497,11 @@ public class DarfCalculator extends javax.swing.JFrame {
 	txfBase.setText(NumberFormat.getCurrencyInstance().format(0));
 	txfResult.setText(NumberFormat.getCurrencyInstance().format(0));
 
-	KeyListener k = new KeyListener(){
-	    @Override
-	    public void keyTyped(KeyEvent e) {}
-
-	    @Override
-	    public void keyPressed(KeyEvent e) {}
-
+	KeyListener k = new KeyAdapter() {
 	    @Override
 	    public void keyReleased(KeyEvent e) {
 		txfResult.setText(NumberFormat.getCurrencyInstance().format(0));
 	    }
-	
 	};
 	txfPercent.addKeyListener(k);
 	txfDeduction.addKeyListener(k);
@@ -511,11 +509,11 @@ public class DarfCalculator extends javax.swing.JFrame {
         txfPercent.setText("0");
         txfDeduction.setText("0");
         
-        taxes = new Rates();
+        rates = new Rates();
         try {
-            taxes.load();
+            rates.load();
         } catch (IOException ex) {
-            //TODO: alert
+            SwingUtils.showMessageDialog(this, LOAD_ERROR_MSG, LOAD_ERROR_TITLE, Level.WARNING, true);
         }
     }
     

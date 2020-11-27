@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rubensandreoli.darfcalc;
+package rubensandreoli.darfcalc.rates;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import javax.imageio.IIOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import rubensandreoli.commons.utils.IntegerUtils;
+import rubensandreoli.commons.utils.NumberUtils;
 
 /** References:
  * https://stackoverflow.com/questions/136419/get-integer-startValue-of-the-current-year-in-java
@@ -39,45 +39,6 @@ public class Rates {
     private static final String CARD_MARKER = "mdl-card m";
     private static final String DATE_MARKER_ATTR = "class";
     private static final String DATE_MARKER = "mdl-card__title";
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc=" ENTRY "> 
-    public class Entry {
-
-        public final double startValue;
-        public final double endValue;
-        public final double tax;
-        public final double deduction;
-
-        public Entry(String startValue, String endValue, String tax, String isention) {
-            this.startValue = parseDouble(startValue);
-            this.endValue = parseDouble(endValue);
-            this.tax = parseDouble(tax);
-            this.deduction = parseDouble(isention);
-        }
-
-        public Entry(double startValue, double endValue, double tax, double deduction) {
-            this.startValue = startValue;
-            this.endValue = endValue;
-            this.tax = tax;
-            this.deduction = deduction;
-        }
-
-        private double parseDouble(String s) {
-            s = s.replaceAll("\\.", "").replaceAll(",", ".").replaceAll("%", "");
-            try {
-                return Double.parseDouble(s);
-            } catch (NumberFormatException ex) {
-                return 0;
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "Entry{" + "startValue=" + startValue + ", endValue=" + endValue + ", tax=" + tax + ", deduction=" + deduction + '}';
-        }
-
-    }
     // </editor-fold>
 
     private final List<Entry> entries = new ArrayList<>();
@@ -99,7 +60,7 @@ public class Rates {
                     //gets first date; check if bigger than last checked and smaller than current 
                     for (String token : tokens) {
                         if (token.contains("/")) {
-                            final int cardYearTmp = IntegerUtils.parseInteger(token.substring(token.length()-4));
+                            final int cardYearTmp = NumberUtils.parseInteger(token.substring(token.length()-4));
                             if (cardYearTmp < year && cardYearTmp > cardYear) {
                                 cardYear = cardYearTmp;
                                 currentTableRows = card.getElementsByTag("tr");

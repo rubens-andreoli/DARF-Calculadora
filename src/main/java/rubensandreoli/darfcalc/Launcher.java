@@ -17,6 +17,7 @@
 package rubensandreoli.darfcalc;
 
 import javax.swing.SwingUtilities;
+import rubensandreoli.darfcalc.gui.DarfCalculator;
 
 public class Launcher {
 
