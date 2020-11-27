@@ -20,6 +20,8 @@ import rubensandreoli.darfcalc.rates.Rates;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -155,6 +157,7 @@ public class DarfCalculator extends javax.swing.JFrame {
         pnlExpensesFields.setAlignmentX(0.0F);
         pnlExpensesFields.setAlignmentY(0.0F);
         pnlExpensesFields.setName("spent"); // NOI18N
+        pnlExpensesFields.setPreferredSize(new java.awt.Dimension(120, 30));
         pnlExpensesFields.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         spnlExpenses.setViewportView(pnlExpensesFields);
 
@@ -407,10 +410,10 @@ public class DarfCalculator extends javax.swing.JFrame {
 	final JTextField txf = createTxf();
 	fieldList.add(txf);
 	panel.add(txf);
-	panel.validate();
+	panel.revalidate();
 	if(fieldList.size() > 5){
 	    panel.setPreferredSize(new Dimension(panel.getWidth(), panel.getHeight()+25));
-	    panel.getParent().validate();
+	    panel.getParent().revalidate();
 	}
    }
           
@@ -436,7 +439,7 @@ public class DarfCalculator extends javax.swing.JFrame {
        panel.repaint();
        if(fieldList.size() >= 5){
             panel.setPreferredSize(new Dimension(panel.getWidth(), panel.getHeight()-25));
-            panel.getParent().validate();
+            panel.getParent().revalidate();
        }
        return true;
    }
@@ -515,6 +518,16 @@ public class DarfCalculator extends javax.swing.JFrame {
         } catch (IOException ex) {
             SwingUtils.showMessageDialog(this, LOAD_ERROR_MSG, LOAD_ERROR_TITLE, Level.WARNING, true);
         }
+        
+        final AdjustmentListener al = new AdjustmentListener() {  
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {  
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
+            }
+        };
+        
+        spnlIncome.getVerticalScrollBar().addAdjustmentListener(al);
+        spnlExpenses.getVerticalScrollBar().addAdjustmentListener(al);
     }
     
 }
