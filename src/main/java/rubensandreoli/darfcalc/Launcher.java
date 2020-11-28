@@ -17,6 +17,8 @@
 package rubensandreoli.darfcalc;
 
 import javax.swing.SwingUtilities;
+import rubensandreoli.commons.others.Level;
+import rubensandreoli.commons.others.Logger;
 import rubensandreoli.darfcalc.gui.DarfCalculator;
 
 public class Launcher {
@@ -35,6 +37,12 @@ public class Launcher {
 	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {}
         //</editor-fold>
         
-        SwingUtilities.invokeLater(() -> new DarfCalculator().setVisible(true));
+        Logger.log.setEnabled(true);
+        
+        try{
+            SwingUtilities.invokeLater(() -> new DarfCalculator().setVisible(true));
+        }catch(Exception ex){
+            Logger.log.print(Level.CRITICAL, ex);
+        }
     }
 }

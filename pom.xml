@@ -40,7 +40,7 @@
               <archive>
                 <manifest>
                   <addClasspath>true</addClasspath>
-                  <mainClass>rubensandreoli.darfcalculator.Launcher</mainClass>
+                  <mainClass>rubensandreoli.darfcalc.Launcher</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
